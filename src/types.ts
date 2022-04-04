@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+export type FormChangeEvent = React.ChangeEvent<HTMLInputElement & HTMLTextAreaElement & HTMLSelectElement>;
+
 export type Form = {
     [key: string]: Options['value'];
 };
@@ -24,5 +26,5 @@ export interface ViewProps {
 export interface KnobsProps {
     options: Options[];
     computedProps: Form;
-    onChange: (event: React.ChangeEvent<HTMLInputElement & HTMLTextAreaElement & HTMLSelectElement>) => void;
+    onChange: (event: FormChangeEvent) => void;
 }

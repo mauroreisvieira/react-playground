@@ -5,10 +5,10 @@ import reactElementToJSXString from 'react-element-to-jsx-string';
 import Editor from './Editor';
 import Knobs from './Knobs';
 
-import { stringToObject } from './utils';
-import { ViewProps, Options, Form } from './types';
+import { stringToObject } from '../utils';
+import { ViewProps, Options, Form } from '../types';
 
-import { useForm } from '../../../../../../packages/hooks/react/useForm';
+import { useForm } from '../hooks/useForm';
 
 const View: React.FC<ViewProps> = ({
     componentName,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-type NativeEvent = React.ChangeEvent<HTMLInputElement & HTMLTextAreaElement & HTMLSelectElement>;
+import { FormChangeEvent } from '../types';
 
 export function useForm<T>(
     initialValues: T,
@@ -8,7 +8,7 @@ export function useForm<T>(
     onCancel?: (data: T) => void,
 ): [
         T,
-        (event: NativeEvent) => void,
+        (event: FormChangeEvent) => void,
         (event: React.SyntheticEvent) => void,
         () => void
     ] {
@@ -18,7 +18,7 @@ export function useForm<T>(
         setFormData(initialValues);
     }, [initialValues]);
 
-    const handleInputChange = (event: NativeEvent) => {
+    const handleInputChange = (event: FormChangeEvent) => {
         const { name, value, checked } = event.target;
         if (['checkbox', 'radio'].includes(event.target.type)) {
             setFormData({ ...formData, [name]: checked });
