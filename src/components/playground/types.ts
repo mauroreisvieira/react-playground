@@ -2,29 +2,29 @@ import * as React from 'react';
 
 export type FormChangeEvent = React.ChangeEvent<HTMLInputElement & HTMLTextAreaElement & HTMLSelectElement>;
 
-export type Form = {
-    [key: string]: Options['value'];
-};
-
-export type Options = {
+export type Props = {
     label: string;
     name: string;
     defaultValue: string | boolean | number | undefined;
     value?: string | boolean | number;
     error?: boolean;
     description?: string;
-    children?: (string | undefined)[];
+    options?: (string | undefined)[];
     validator?: <T>(props: T) => boolean;
 };
 
 export interface ViewProps {
     componentName: string;
-    options: Omit<Options, 'value' | 'error'>[];
-    inverted?: <T>(props: T) => boolean;
+    props: Omit<Props, 'value' | 'error'>[];
+    onInvertedChange?: <T>(props: T) => boolean;
 }
 
+export type Form = {
+    [key: string]: Props['value'];
+};
+
 export interface KnobsProps {
-    options: Options[];
+    props: Props[];
     computedProps: Form;
     onChange: (event: FormChangeEvent) => void;
 }

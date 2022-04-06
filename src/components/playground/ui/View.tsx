@@ -2,31 +2,30 @@ import * as React from 'react';
 
 import reactElementToJSXString from 'react-element-to-jsx-string';
 
-import Editor from './Editor';
-import Knobs from './Knobs';
+import { Editor } from './Editor';
+import { Knobs } from './Knobs';
 
-import { stringToObject } from '../utils';
-import { ViewProps, Options, Form } from '../types';
+import { stringToObject } from '../../../utils';
+import { ViewProps, Props, Form } from '../types';
 
-import { useForm } from '../hooks/useForm';
+import { useForm } from '../../../hooks/useForm';
 
-const View: React.FC<ViewProps> = ({
+export const View: React.FC<ViewProps> = ({
     componentName,
-    options,
-    inverted,
+    props,
+    onInvertedChange,
     children,
 }) => {
-    const [settings, setSettings] = React.useState<Options[]>(options);
-
+    const [settings, setSettings] = React.useState<Props[]>(props);
     const initialValues = React.useMemo(() => (
-        options.reduce((acc, curr) => {
+        props.reduce((acc, curr) => {
             const { name, defaultValue } = curr;
             return {
                 ...acc,
                 [name]: defaultValue,
             };
         }, {})
-    ), []);
+    ), [props]);
 
     const [
         computedProps,
@@ -41,6 +40,7 @@ const View: React.FC<ViewProps> = ({
                 value: computedProps[setting.name] || setting.defaultValue,
             })),
         );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [computedProps]);
 
     const setError = (key: string, error: boolean) => {
@@ -58,7 +58,7 @@ const View: React.FC<ViewProps> = ({
     const Component = React.useMemo(() => {
         const nestedProps = Object.keys(computedProps)
             .filter((key) => key.includes('.') && (computedProps[key] && computedProps[key] !== 'undefined'))
-            .reduce((_, curr) => stringToObject<Options['defaultValue']>(curr, computedProps[curr]), {});
+            .reduce((_, curr) => stringToObject<Props['defaultValue']>(curr, computedProps[curr]), {});
 
         const props = Object.keys(computedProps)
             .reduce((acc: Record<string, unknown>, key) => {
@@ -89,6 +89,7 @@ const View: React.FC<ViewProps> = ({
                 ...nestedProps,
             });
         }
+
         return null;
     }, [computedProps]);
 
@@ -105,14 +106,14 @@ const View: React.FC<ViewProps> = ({
                     <div
                         style={{
                             width: '100%',
-                            background: inverted && inverted(computedProps) ? '#000' : undefined,
+                            background: onInvertedChange && onInvertedChange(computedProps) ? '#000' : undefined,
                         }}>
                         { Component }
                     </div>
                 </div>
                 <div>
                     <Knobs
-                        options={settings}
+                        props={settings}
                         computedProps={computedProps}
                         onChange={handleChange} />
                 </div>
@@ -122,6 +123,7 @@ const View: React.FC<ViewProps> = ({
             </div>
             <div>
                 <button
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={() => navigator.clipboard.writeText(CODE)}>
                     Copy Code
                 </button>
@@ -133,5 +135,3 @@ const View: React.FC<ViewProps> = ({
         </>
     );
 };
-
-export default View;

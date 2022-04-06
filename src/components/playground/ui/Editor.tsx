@@ -3,11 +3,11 @@ import * as React from 'react';
 import Highlight, { defaultProps } from 'prism-react-renderer';
 import * as themes from 'prism-react-renderer/themes/vsLight';
 
-interface EditorProps {
+export interface EditorProps {
     code: string;
 }
 
-const Editor = ({ code }: EditorProps) => (
+export const Editor = ({ code }: EditorProps) => (
     <Highlight
         {...defaultProps}
         theme={themes.default}
@@ -17,9 +17,9 @@ const Editor = ({ code }: EditorProps) => (
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <pre className={className} style={style}>
                 {tokens.map((line, i) => (
-                    <div {...getLineProps({ line, key: i })}>
+                    <div key={i} {...getLineProps({ line, key: i })}>
                         {line.map((token, key) => (
-                            <span {...getTokenProps({ token, key })} />
+                            <span key={key} {...getTokenProps({ token, key })} />
                         ))}
                     </div>
                 ))}
@@ -27,5 +27,3 @@ const Editor = ({ code }: EditorProps) => (
         )}
     </Highlight>
 );
-
-export default Editor;

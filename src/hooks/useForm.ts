@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { FormChangeEvent } from '../types';
+type FormChangeEvent = React.ChangeEvent<HTMLInputElement & HTMLTextAreaElement & HTMLSelectElement>
 
 export function useForm<T>(
     initialValues: T,
