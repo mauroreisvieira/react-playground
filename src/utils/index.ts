@@ -21,3 +21,6 @@ export const stringToObject = <T>(string: string, value: T, separator = '.') => 
 };
 
 export const uniqueId = (componentName: string, id: string) => (`${componentName}-${id}`).toLocaleLowerCase();
+
+export const classNames = (...classes: (false | null | undefined | string)[]): string =>
+    classes.filter(Boolean).join(' ');

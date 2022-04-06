@@ -12,20 +12,19 @@ const Editor = ({ code }: EditorProps) => (
         {...defaultProps}
         theme={themes.default}
         code={code}
-        language="jsx">
-        { ({
-            className, style, tokens, getLineProps, getTokenProps,
-        }) => (
+        language="jsx"
+    >
+        {({ className, style, tokens, getLineProps, getTokenProps }) => (
             <pre className={className} style={style}>
-                { tokens.map((line, i) => (
+                {tokens.map((line, i) => (
                     <div {...getLineProps({ line, key: i })}>
-                        { line.map((token, key) => (
+                        {line.map((token, key) => (
                             <span {...getTokenProps({ token, key })} />
-                        )) }
+                        ))}
                     </div>
-                )) }
+                ))}
             </pre>
-        ) }
+        )}
     </Highlight>
 );
 

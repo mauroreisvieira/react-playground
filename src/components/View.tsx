@@ -100,20 +100,18 @@ const View: React.FC<ViewProps> = ({
 
     return (
         <>
-            <div className="gb-row">
-                <div className="gb-col-8 gb-d-flex gb-row--middle gb-row--center">
+            <div>
+                <div>
                     <div
                         style={{
                             width: '100%',
                             background: inverted && inverted(computedProps) ? '#000' : undefined,
-                        }}
-                        className="gb-text-center gb-px-2 gb-py-2">
+                        }}>
                         { Component }
                     </div>
                 </div>
-                <div className="gb-col-4">
+                <div>
                     <Knobs
-                        componentName={componentName}
                         options={settings}
                         computedProps={computedProps}
                         onChange={handleChange} />
@@ -122,22 +120,13 @@ const View: React.FC<ViewProps> = ({
             <div>
                 <Editor code={CODE} />
             </div>
-            <div className="gb-text-right">
+            <div>
                 <button
-                    className="gb-mr-2"
-                    skin="gray"
-                    skinModifier="ghost"
-                    size="sm"
-                    squared
                     onClick={() => navigator.clipboard.writeText(CODE)}>
                     Copy Code
                 </button>
                 <button
-                    skin="gray"
-                    skinModifier="ghost"
-                    size="sm"
-                    squared
-                    onClick={() => reset()}>
+                    onClick={reset}>
                     Reset
                 </button>
             </div>
