@@ -1,36 +1,32 @@
 import * as React from 'react';
 import { View } from '../components/playground';
-import { Button } from '../components/Button';
+import { Button, ButtonProps } from '../components/Button';
 
 const ViewPage: React.FC = () => (
     <>
-        <h1>View</h1>
+        <h1>Playground</h1>
         <View
             componentName="Button"
-            props={[
-                {
+            props={{
+                size: {
                     label: 'Size',
-                    name: 'size',
                     defaultValue: undefined,
                     options: [undefined, 'xs', 'sm', 'lg'],
                 },
-                {
+                isLoading: {
+                    label: 'Loading',
+                    defaultValue: false,
+                },
+                skin: {
                     label: 'Skin',
-                    name: 'skin',
                     defaultValue: 'brand',
                     options: ['brand', 'danger'],
                 },
-                {
-                    label: 'Loading',
-                    name: 'isLoading',
-                    defaultValue: false,
-                },
-                {
+                children: {
                     label: 'Children',
-                    name: 'children',
                     defaultValue: 'Button',
                 },
-            ]}>
+            }}>
             <Button />
         </View>
     </>

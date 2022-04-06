@@ -6,7 +6,7 @@ import { Editor } from './Editor';
 import { Knobs } from './Knobs';
 
 import { stringToObject } from '../../../utils';
-import { ViewProps, Props, Form } from '../types';
+import { ViewProps, Props, Form, UsePlaygroundProps } from '../types';
 
 import { useForm } from '../../../hooks/useForm';
 
@@ -16,13 +16,12 @@ export const View: React.FC<ViewProps> = ({
     onInvertedChange,
     children,
 }) => {
-    const [settings, setSettings] = React.useState<Props[]>(props);
+    const [settings, setSettings] = React.useState<ViewProps['props']>(props);
     const initialValues = React.useMemo(() => (
-        props.reduce((acc, curr) => {
-            const { name, defaultValue } = curr;
+        Object.keys(props).reduce((_, propName) => {
             return {
-                ...acc,
-                [name]: defaultValue,
+                ...props[propName],
+                [propName]: props[propName]?.defaultValue,
             };
         }, {})
     ), [props]);
@@ -34,26 +33,33 @@ export const View: React.FC<ViewProps> = ({
     ] = useForm<Form>(initialValues);
 
     React.useEffect(() => {
-        setSettings(
-            settings.map((setting) => ({
-                ...setting,
-                value: computedProps[setting.name] || setting.defaultValue,
-            })),
-        );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        let newSettings = {};
+        Object.keys(settings).forEach((propName: string) => {
+            newSettings = {
+                ...settings,
+                [propName]: {
+                    ...settings[propName],
+                    value: computedProps[propName] || settings[propName]?.defaultValue,
+                },
+            }
+        });
+        setSettings(newSettings);
     }, [computedProps]);
 
-    const setError = (key: string, error: boolean) => {
-        setSettings(settings.map((setting) => {
-            if (setting.name === key) {
-                return {
-                    ...setting,
-                    error,
-                };
-            }
-            return setting;
-        }));
-    };
+    console.log('%cProps', 'color:blue', props);
+    console.log('%cSettings', 'color:red', settings);
+
+    // const setError = (key: string, error: boolean) => {
+    //     setSettings(Object.keys(settings).map((propName) => {
+    //         if (propName === key) {
+    //             return {
+    //                 ...settings[propName],
+    //                 error,
+    //             };
+    //         }
+    //         return setting;
+    //     }));
+    // };
 
     const Component = React.useMemo(() => {
         const nestedProps = Object.keys(computedProps)
@@ -66,15 +72,15 @@ export const View: React.FC<ViewProps> = ({
                     acc[key] = computedProps[key];
                 }
 
-                if (key.startsWith('on')) {
-                    try {
-                        // eslint-disable-next-line no-eval
-                        acc[key] = eval(String(computedProps[key]));
-                        setError(key, false);
-                    } catch (error) {
-                        setError(key, true);
-                    }
-                }
+                // if (key.startsWith('on')) {
+                //     try {
+                //         // eslint-disable-next-line no-eval
+                //         acc[key] = eval(String(computedProps[key]));
+                //         setError(key, false);
+                //     } catch (error) {
+                //         setError(key, true);
+                //     }
+                // }
 
                 return acc;
             }, {});
@@ -91,7 +97,8 @@ export const View: React.FC<ViewProps> = ({
         }
 
         return null;
-    }, [computedProps]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [children, componentName, computedProps]);
 
     const CODE = reactElementToJSXString(Component, {
         tabStop: 2,

@@ -1,39 +1,38 @@
 import * as React from 'react';
-import { View } from '../components/playground';
+import { usePlayground } from '../components/playground';
 import { Button } from '../components/Button';
 
-const UsePlaygroundPage: React.FC = () => (
-    <>
+const UsePlaygroundPage: React.FC = () => {
         <h1>Use Playground</h1>
-        <View
-            componentName="Button"
-            props={[
-                {
+        const params = usePlayground({
+            componentName: "Button",
+            props: {
+                size: {
                     label: 'Size',
-                    name: 'size',
                     defaultValue: undefined,
                     options: [undefined, 'xs', 'sm', 'lg'],
                 },
-                {
+                skin: {
                     label: 'Skin',
-                    name: 'skin',
                     defaultValue: 'brand',
                     options: ['brand', 'danger'],
                 },
-                {
+                'skin.name.test': {
                     label: 'Loading',
-                    name: 'isLoading',
                     defaultValue: false,
                 },
-                {
+                children: {
                     label: 'Children',
-                    name: 'children',
                     defaultValue: 'Button',
                 },
-            ]}>
-            <Button />
-        </View>
-    </>
-);
+            },
+            scope: Button
+        });
+
+        console.log(params);
+        return (
+            <h1>Use Playground</h1>
+        );
+};
 
 export default UsePlaygroundPage;

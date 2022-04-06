@@ -5,11 +5,9 @@ import { BrowserRouter } from 'react-router-dom';
 import AppRoute from './AppRoute';
 
 const App: React.FC = () => (
-    <React.StrictMode>
-        <BrowserRouter>
-            <AppRoute />
-        </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+        <AppRoute />
+    </BrowserRouter>
 );
 
 const rootElement = document.getElementById('root');
